@@ -9,10 +9,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 public class CustomerProductDatabase extends DataBase{
-     private ArrayList<CustomerProduct> records;
+     private ArrayList<CustomerProduct> records;//records is an ArrayList that holds Record references,
+//but each element is actually a real object — like a Product or CustomerProduct.
      
     public CustomerProductDatabase(String filename) {
         super(filename);
+        this.records = new ArrayList<>();//
+
     }
 
 @override
