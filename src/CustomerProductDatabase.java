@@ -16,7 +16,7 @@ public class CustomerProductDatabase extends DataBase{
     }
 
 @override
-    // 1️⃣ Read from file
+    // read from file
     public void readFromFile() {
         records.clear();//law 3amalna call 2aktar men mara fy nafs el run 2amsa7 kol el 2adim
         File file = new File(filename);
@@ -35,7 +35,7 @@ public class CustomerProductDatabase extends DataBase{
         }
     }
 @override
-    // 2️⃣ Create a record from a line
+    //create a record from a line
     public CustomerProduct createRecordFrom(String line) {
         try {
             String[] parts = line.split(",");
@@ -53,11 +53,11 @@ public class CustomerProductDatabase extends DataBase{
         }
     }
 
-    // 3️⃣ Return all records
+    // return all records
     public ArrayList<CustomerProduct> returnAllRecords() {
         return records;//refrence to the arraylist
     }
-
+//a method in record interface
     @Override
 public String getSearchKey() {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -65,7 +65,7 @@ public String getSearchKey() {
 }
 
     
-    // 4️⃣ Check if a record exists by key
+    // check if record exists by key
     public boolean contains(String key) {
         for (CustomerProduct record : records) {
             if (record.getSearchKey().equals(key)) {
@@ -75,7 +75,7 @@ public String getSearchKey() {
         return false;
     }
 
-    // 5️⃣ Get a record by key
+    // get a record by key
     public CustomerProduct getRecord(String key) {
         for (CustomerProduct record : records) {
             if (record.getSearchKey().equals(key)) {
@@ -85,7 +85,7 @@ public String getSearchKey() {
         return null;
     }
 
-    // 6️⃣ Insert a new record (if not exists)
+    // insert a new record if not exist
     public void insertRecord(CustomerProduct record) {
         if (!contains(record.getSearchKey())) {
             records.add(record);
@@ -94,7 +94,7 @@ public String getSearchKey() {
         }
     }
 
-    // 7️⃣ Delete a record by key
+    // delete a record by key
     public void deleteRecord(String key) {
         CustomerProduct toRemove = null;
         for (CustomerProduct record : records) {
@@ -111,7 +111,7 @@ public String getSearchKey() {
         }
     }
 
-    // 8️⃣ Save all records to file
+    // save all records in file
     public void saveToFile() {
         try (FileWriter writer = new FileWriter(filename, false)) {
             for (CustomerProduct record : records) {
