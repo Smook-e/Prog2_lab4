@@ -126,6 +126,4 @@ w
             System.out.println("All records saved successfully to " + filename);
         } catch (IOException e) {
             System.out.println("Error writing to file: " + filename);
-        }
-    }
-}
+        }   }
