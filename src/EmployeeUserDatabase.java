@@ -6,6 +6,7 @@ import java.io.IOException;
 public class EmployeeUserDatabase extends DataBase {
 
     public EmployeeUserDatabase(String filename) {
+        //adds file name to parent Database
         super(filename);
     }
 
@@ -13,7 +14,10 @@ public class EmployeeUserDatabase extends DataBase {
     public void readFromFile() {
         try(BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
-            records.clear();
+
+            if(!records.isEmpty()) {
+                records.clear();
+            }
             while ((line = br.readLine()) != null) {
                 Record r = createRecordFrom(line);
                 if(r != null) {

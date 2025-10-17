@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public abstract class DataBase {
-    ArrayList<Record> records;
-    String filename;
+    protected ArrayList<Record> records = new ArrayList<>();
+    protected String filename;
+
     public DataBase(String filename) {
         this.filename = filename;
+        this.readFromFile();
     }
     public abstract void readFromFile();
 
@@ -35,12 +37,18 @@ public abstract class DataBase {
         }
     }
     public void deleteRecord(String key){
-        records.remove(getRecord(key));
+        if(contains(key)){
+            records.remove(getRecord(key));
+        }
+        else  {
+            System.out.println("Record does not exist");
+        }
+
     };
     public void saveToFile(){
         try(FileWriter file = new FileWriter(filename)) {
             for(Record record : records){
-                file.write(record.toString() + "\n");
+                file.write(record.lineRepresentation() + "\n");
 
             }
         }catch (FileNotFoundException e){

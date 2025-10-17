@@ -1,0 +1,5 @@
+E1200,Ahmed,ahmed_1999@gmail.com,Alexandria,01088877345
+E1210,Joe,Joe@gmail.com,Cairo,01138877345
+C1200,Ali,Ali_2005@gmail.com,Giza,01234577345
+D4100,David,David@gmail.com,Texas,01022277345
+j2100,John,John@yahoo.com,California,01022277345
