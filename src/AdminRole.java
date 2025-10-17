@@ -9,7 +9,7 @@ public class AdminRole {
     {
         if(database.contains(employeeId))
         {
-            System.out.print("\nEmployee already saved.");
+            System.out.println("Employee already saved.");
             return;
         }
         EmployeeUser employee=new EmployeeUser(employeeId,name,email,address,phoneNumber);
@@ -27,7 +27,7 @@ public class AdminRole {
     {  
         if(!database.contains(Key))
         {
-            System.out.print("\nEmployee id doesn't exist.");
+            System.out.println("Employee id doesn't exist.");
             return;
         }
        database.deleteRecord(Key);
