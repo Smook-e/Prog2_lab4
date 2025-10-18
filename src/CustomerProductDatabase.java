@@ -3,10 +3,7 @@ public class CustomerProductDatabase extends DataBase{
         super(filename);
     }
 
-    @Override
-    public void readFromFile() {
 
-    }
 
     @Override
     public Record createRecordFrom(String line) {

@@ -10,28 +10,7 @@ public class EmployeeUserDatabase extends DataBase {
         super(filename);
     }
 
-    @Override
-    public void readFromFile() {
-        try(BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String line;
 
-            if(!records.isEmpty()) {
-                records.clear();
-            }
-            while ((line = br.readLine()) != null) {
-                Record r = createRecordFrom(line);
-                if(r != null) {
-                    records.add(r);
-                }
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found");
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            System.out.println("Error reading file");
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
     public Record createRecordFrom(String line) {

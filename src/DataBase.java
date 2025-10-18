@@ -1,6 +1,4 @@
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 public abstract class DataBase {
@@ -11,7 +9,27 @@ public abstract class DataBase {
         this.filename = filename;
         this.readFromFile();
     }
-    public abstract void readFromFile();
+    public void readFromFile(){
+        try(BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            String line;
+
+            if(!records.isEmpty()) {
+                records.clear();
+            }
+            while ((line = br.readLine()) != null) {
+                Record r = createRecordFrom(line);
+                if(r != null) {
+                    records.add(r);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            System.out.println("Error reading file");
+            throw new RuntimeException(e);
+        }
+    }
 
     public abstract Record createRecordFrom(String line);
     public ArrayList<Record> returnAllRecords(){

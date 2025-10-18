@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class CustomerProduct implements Record {
     private String customerSSN;
@@ -32,19 +33,14 @@ public class CustomerProduct implements Record {
     public void setPaid(boolean paid) {
         this.paid = paid;
     }
-    public static String reverseDate(String Date)
-    {
-        String[] tokens = Date.split("-");
-        String revDate = tokens[2]+"-"+tokens[1]+"-"+tokens[0];
-        return revDate;
-    }
+
     @Override
     public String lineRepresentation() {
-        return customerSSN+","+productID+","+reverseDate(purchaseDate.toString())+","+paid;
+        return getSearchKey()+","+paid;
     }
 
     @Override
     public String getSearchKey() {
-        return customerSSN+","+productID+","+reverseDate(purchaseDate.toString());
+        return customerSSN+","+productID+","+purchaseDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 }
