@@ -28,3 +28,4 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+/lab4 test/nbproject/private/
