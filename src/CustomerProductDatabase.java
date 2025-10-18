@@ -1,31 +1,33 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+
+import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
-public class CustomerProductDatabase extends DataBase{
-     private ArrayList<CustomerProduct> records;//records is an ArrayList that holds Record references,
-//but each element is actually a real object — like a Product or CustomerProduct.
-     
-    public CustomerProductDatabase(String filename) {
-        super(filename);
-        this.records = new ArrayList<>();//
 
+public class CustomerProductDatabase extends DataBase {
+
+    private ArrayList<CustomerProduct> records; // your own typed list
+    private String filename; // as the instructions require
+
+    // 🔹 Constructor
+    public CustomerProductDatabase(String filename) {
+        super(filename);          // calls DataBase constructor
+        this.filename = filename; // local file name
+        this.records = new ArrayList<>(); // store CustomerProduct objects
     }
 
-@override
-    // read from file
+    // 🔹 1. Read from file and fill the list
+    @Override
     public void readFromFile() {
-        records.clear();//law 3amalna call 2aktar men mara fy nafs el run 2amsa7 kol el 2adim
+        records.clear();
         File file = new File(filename);
+
         try (Scanner input = new Scanner(file)) {
             while (input.hasNextLine()) {
                 String line = input.nextLine().trim();
                 if (!line.isEmpty()) {
-                    CustomerProduct record = createRecordFrom(line);//abstract method in DataBase class w override ta7et dih betreturn object tyoe costumor product
+                    CustomerProduct record = createRecordFrom(line);
                     if (record != null) {
                         records.add(record);
                     }
@@ -35,38 +37,32 @@ public class CustomerProductDatabase extends DataBase{
             System.out.println("File not found: " + filename);
         }
     }
-@override
-    //create a record from a line
+
+    // 🔹 2. Create a CustomerProduct object from one line
+    @Override
     public CustomerProduct createRecordFrom(String line) {
         try {
             String[] parts = line.split(",");
-            if (parts.length < 4) return null;//lazem 4 2agza2 (data) 8eir keda el satr m4 kamel
+            if (parts.length < 4) return null;
 
             String customerSSN = parts[0];
             String productID = parts[1];
             LocalDate purchaseDate = LocalDate.parse(parts[2], DateTimeFormatter.ofPattern("dd-MM-yyyy"));
             boolean paid = Boolean.parseBoolean(parts[3]);
 
-            return new CustomerProduct(customerSSN, productID, purchaseDate, paid);// bey3mel object gedid w ye7ot fih kol el data
+            return new CustomerProduct(customerSSN, productID, purchaseDate,paid);
         } catch (Exception e) {
             System.out.println("Error parsing line: " + line);
             return null;
         }
     }
 
-    // return all records
+    // 🔹 3. Return all CustomerProduct records
     public ArrayList<CustomerProduct> returnAllRecords() {
-        return records;//refrence to the arraylist
+        return records;
     }
-//a method in record interface
-    @Override
-public String getSearchKey() {
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-    return customerSSN + "," + productID + "," + purchaseDate.format(formatter);
-}
 
-    
-    // check if record exists by key
+    // 🔹 4. Check if a record exists by key
     public boolean contains(String key) {
         for (CustomerProduct record : records) {
             if (record.getSearchKey().equals(key)) {
@@ -76,7 +72,7 @@ public String getSearchKey() {
         return false;
     }
 
-    // get a record by key
+    // 🔹 5. Get a record by key
     public CustomerProduct getRecord(String key) {
         for (CustomerProduct record : records) {
             if (record.getSearchKey().equals(key)) {
@@ -86,7 +82,7 @@ public String getSearchKey() {
         return null;
     }
 
-    // insert a new record if not exist
+    // 🔹 6. Insert a record
     public void insertRecord(CustomerProduct record) {
         if (!contains(record.getSearchKey())) {
             records.add(record);
@@ -95,29 +91,18 @@ public String getSearchKey() {
         }
     }
 
-    // delete a record by key
+    // 🔹 7. Delete a record by key
     public void deleteRecord(String key) {
-        CustomerProduct toRemove = null;
-        for (CustomerProduct record : records) {
-            if (record.getSearchKey().equals(key)) {
-                toRemove = record;
-                break;
-            }
-        }
+        CustomerProduct toRemove = getRecord(key);
         if (toRemove != null) {
             records.remove(toRemove);
-            System.out.println("Record with key [" + key + "] deleted successfully.");
         } else {
-            System.out.println("No record found with key [" + key + "].");
+            System.out.println("No record found with key: " + key);
         }
     }
- @Override
-    public String lineRepresentation() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return customerSSN + "," + productID + "," + purchaseDate.format(formatter)+","+paid;
-    }
-   
-    // save all records in file
+
+    // 🔹 8. Save all records to file
+    @Override
     public void saveToFile() {
         try (FileWriter writer = new FileWriter(filename, false)) {
             for (CustomerProduct record : records) {
@@ -129,4 +114,3 @@ public String getSearchKey() {
         }
     }
 }
-
