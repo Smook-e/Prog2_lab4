@@ -17,7 +17,7 @@ public class CustomerProductDatabase extends DataBase {
         this.records = new ArrayList<>(); // store CustomerProduct objects
     }
 
-    // 🔹 1. Read from file and fill the list
+    //  Read from file and fill the list
     @Override
     public void readFromFile() {
         records.clear();
@@ -38,7 +38,7 @@ public class CustomerProductDatabase extends DataBase {
         }
     }
 
-    // 🔹 2. Create a CustomerProduct object from one line
+    // Create a CustomerProduct object from one line
     @Override
     public CustomerProduct createRecordFrom(String line) {
         try {
@@ -57,12 +57,12 @@ public class CustomerProductDatabase extends DataBase {
         }
     }
 
-    // 🔹 3. Return all CustomerProduct records
+    // Return all CustomerProduct records
     public ArrayList<CustomerProduct> returnAllRecords() {
         return records;
     }
 
-    // 🔹 4. Check if a record exists by key
+    //  Check if a record exists by key
     public boolean contains(String key) {
         for (CustomerProduct record : records) {
             if (record.getSearchKey().equals(key)) {
@@ -72,7 +72,7 @@ public class CustomerProductDatabase extends DataBase {
         return false;
     }
 
-    // 🔹 5. Get a record by key
+    // . Get a record by key
     public CustomerProduct getRecord(String key) {
         for (CustomerProduct record : records) {
             if (record.getSearchKey().equals(key)) {
@@ -82,7 +82,7 @@ public class CustomerProductDatabase extends DataBase {
         return null;
     }
 
-    // 🔹 6. Insert a record
+    //. Insert a record
     public void insertRecord(CustomerProduct record) {
         if (!contains(record.getSearchKey())) {
             records.add(record);
@@ -91,7 +91,7 @@ public class CustomerProductDatabase extends DataBase {
         }
     }
 
-    // 🔹 7. Delete a record by key
+    //  Delete a record by key
     public void deleteRecord(String key) {
         CustomerProduct toRemove = getRecord(key);
         if (toRemove != null) {
@@ -101,7 +101,7 @@ public class CustomerProductDatabase extends DataBase {
         }
     }
 
-    // 🔹 8. Save all records to file
+    // Save all records to file
     @Override
     public void saveToFile() {
         try (FileWriter writer = new FileWriter(filename, false)) {
