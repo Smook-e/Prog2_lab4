@@ -28,22 +28,36 @@ public class EmployeeRole {
 
 
     public Product[] getListOfProducts() {
-    productsDatabase.readFromFile();//hat2ra el filename ely gowa el poductdatabase object w ne7ot kol el 
-    //lines fy arraylist 3ala hay2et ecords
-    ArrayList<Product> allProducts = productsDatabase.returnAllRecords();
-    Product[] productArray = new Product[allProducts.size()];
-    return allProducts.toArray(productArray);
-}
+        productsDatabase.readFromFile();
+        ArrayList<Record> allRecords = productsDatabase.returnAllRecords();
+
+        ArrayList<Product> allProducts = new ArrayList<>();
+        for (Record r : allRecords) {
+            if (r instanceof Product) {
+                allProducts.add((Product) r);
+            }
+        }
+
+        Product[] productArray = new Product[allProducts.size()];
+        return allProducts.toArray(productArray);
+    }
 
 
-    // 🔹 5. Return all purchasing operations as an array
+    //  Return all purchasing operations as an array
     public CustomerProduct[] getListOfPurchasingOperations() {
         customerProductDatabase.readFromFile();
-        ArrayList<CustomerProduct> allPurchases = customerProductDatabase.returnAllRecords();
+        ArrayList<Record> allRecords = customerProductDatabase.returnAllRecords();
+
+        ArrayList<CustomerProduct> allPurchases = new ArrayList<>();
+        for (Record r : allRecords) {
+            if (r instanceof CustomerProduct) {
+                allPurchases.add((CustomerProduct) r);
+            }
+        }
+
         CustomerProduct[] purchaseArray = new CustomerProduct[allPurchases.size()];
         return allPurchases.toArray(purchaseArray);
     }
-
     //  Purchase a product
     public boolean purchaseProduct(String customerSSN, String productID, LocalDate purchaseDate) {
         productsDatabase.readFromFile();
@@ -122,24 +136,27 @@ public class EmployeeRole {
 
     
     public boolean applyPayment(String customerSSN, LocalDate purchaseDate) {
-        customerProductDatabase.readFromFile();
-        ArrayList<CustomerProduct> allRecords = customerProductDatabase.returnAllRecords();
+    ArrayList<Record> allRecords = customerProductDatabase.returnAllRecords();
 
-        for (CustomerProduct record : allRecords) {
-            if (record.getCustomerSSN().equals(customerSSN)
-                    && record.getPurchaseDate().equals(purchaseDate)) {
+for (Record r : allRecords) {
+    if (r instanceof CustomerProduct) {
+        CustomerProduct record = (CustomerProduct) r;
+        if (record.getCustomerSSN().equals(customerSSN)
+                && record.getPurchaseDate().equals(purchaseDate)) {
 
-                if (record.isPaid()) {
-                    System.out.println(" This purchase is already marked as paid.");
-                    return false;
-                }
-
-                record.setPaid(true);
-                customerProductDatabase.saveToFile();
-
-                System.out.println("Payment applied successfully for " + customerSSN);
-                return true;
+            if (record.isPaid()) {
+                System.out.println("This purchase is already marked as paid.");
+                return false;
             }
+
+            record.setPaid(true);
+            customerProductDatabase.saveToFile();
+            System.out.println("Payment applied successfully for " + customerSSN);
+            return true;
+        }
+    }
+
+
         }
 
         System.out.println("️ No matching unpaid purchase found for this customer and date.");
