@@ -21,12 +21,14 @@ public class Product implements Record{
     }
     public void setQuantity(int quantity)
     {
+        if(quantity<0){
+            System.out.println("Invalid Quantity. Please Enter a number greater or equal to 0");return;
+        }
         this.quantity=quantity;
     }
     @Override
     public String lineRepresentation() {
-        String s= productID+","+productName+","+manufacturerName+","+supplierName+","+quantity+","+price;
-        return s;
+        return productID+","+productName+","+manufacturerName+","+supplierName+","+quantity+","+price;
     }
     @Override
     public String getSearchKey() {

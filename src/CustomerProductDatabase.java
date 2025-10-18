@@ -1,5 +1,3 @@
-package lab4;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -113,7 +111,12 @@ public String getSearchKey() {
             System.out.println("No record found with key [" + key + "].");
         }
     }
-
+ @Override
+    public String lineRepresentation() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return customerSSN + "," + productID + "," + purchaseDate.format(formatter)+","+paid;
+    }
+   
     // save all records in file
     public void saveToFile() {
         try (FileWriter writer = new FileWriter(filename, false)) {

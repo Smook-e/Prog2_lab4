@@ -1,3 +1,5 @@
+import java.time.format.DateTimeFormatter;
+
 
 public class EmployeeRole {
     private productsDatabase productsDatabase;
@@ -126,6 +128,70 @@ public double returnProduct(String customerSSN, String productID,LocalDate purch
         System.out.println("Product not found in Products.txt.");
         return -1;
     }
+        @Override
+public String getSearchKey() {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    return customerSSN + "," + productID + "," + purchaseDate.format(formatter);
+}
+
+    CustomerProduct purchase = (CustomerProduct) customerProductDatabase.getRecord(key);
+    if (purchase == null) {
+        System.out.println("No matching purchase record found.");
+        return -1;
+    }
+
+    long daysBetween = java.time.temporal.ChronoUnit.DAYS.between(purchaseDate, returnDate);
+    if (daysBetween > 14) {
+        System.out.println("Return period expired. More than 14 days have passed.");
+        return -1;
+    }
+     //everything valid
+    product.setQuantity(product.getQuantity() + 1);
+
+    // remove the record
+    customerProductDatabase.deleteRecord(key);
+    productsDatabase.saveToFile();
+    customerProductDatabase.saveToFile();
+
+    System.out.println("Return successful. Refund = " + product.getPrice());
+    return product.getPrice();
+}
+
+
+public boolean applyPayment(String customerSSN, LocalDate purchaseDate) {
+    customerProductDatabase.readFromFile();
+
+    // array of customer product ta5od el refrence ely fy el object arraylist
+    ArrayList<CustomerProduct> allRecords = customerProductDatabase.returnAllRecords();//public method in class customerproduct return objects
+    for (CustomerProduct record : allRecords) {
+        // Check for same customer SSN and same date
+        if (record.getCustomerID().equals(customerSSN) &&
+            record.getPurchaseDate().equals(purchaseDate)) {
+
+            if (record.isPaid()) {
+                System.out.println("This purchase is already marked as paid.");
+                return false;
+            }
+
+            record.setPaid(true);
+
+            customerProductDatabase.saveToFile();
+
+            System.out.println("Payment applied successfully for customer: " + customerSSN);
+            return true;
+        }
+    }
+    System.out.println("No matching unpaid purchase found for this customer and date.");
+    return false;
+}
+
+
+
+
+public void logout(){
+productsDatabase.saveToFile();
+    customerProductDatabase.saveToFile();
+        }
 }
 
 

@@ -2,34 +2,20 @@ public class AdminRole {
     private EmployeeUserDatabase database;
     public AdminRole()
     {
-       database = new EmployeeUserDatabase("Employees.txt"); 
-       database.readFromFile();
+       database = new EmployeeUserDatabase("Files\\Employees.txt"); 
+
     }
     public void addEmployee(String employeeId, String name, String email, String address, String phoneNumber)
     {
-        if(database.contains(employeeId))
-        {
-            System.out.println("Employee already saved.");
-            return;
-        }
-        EmployeeUser employee=new EmployeeUser(employeeId,name,email,address,phoneNumber);
-        database.insertRecord(employee);
+        database.insertRecord( new EmployeeUser(employeeId,name,email,address,phoneNumber));
         logout();  
     }
     public EmployeeUser[] getListOfEmployees()
     {
-        int x=database.returnAllRecords().size();
-        EmployeeUser[] employees = new EmployeeUser[x];
-        database.returnAllRecords().toArray(employees);
-        return employees;
+        return database.returnAllRecords().toArray(new EmployeeUser[0]);
     }
     public void removeEmployee(String Key)
-    {  
-        if(!database.contains(Key))
-        {
-            System.out.println("Employee id doesn't exist.");
-            return;
-        }
+    {
        database.deleteRecord(Key);
        logout();
     }
