@@ -8,82 +8,49 @@ public class EmployeeRole {
     private CustomerProductDatabase customerProductDatabase;
     public EmployeeRole() {
         //public methods in other classes
-        productsDatabase = new ProductDatabase("Products.txt");
-        customerProductDatabase = new CustomerProductDatabase("CustomersProducts.txt");
+        productsDatabase = new ProductDatabase("Files\\Products.txt");
+        customerProductDatabase = new CustomerProductDatabase("Files\\CustomerProducts.txt");
     }
 
     //  new product
-    public void addProduct(String productID, String productName, String manufacturerName,String supplierName, int quantity) {
-        productsDatabase.readFromFile();
-        Product newProduct = new Product(productID, productName, manufacturerName, supplierName, quantity, 0.0f);
-//net2aked eno m4 mawgoud fi el arraylist beta3t el object no3o productdatabase
-        if (!productsDatabase.contains(productID)) {
-            productsDatabase.insertRecord(newProduct);//pulic method in dtabase class
-            productsDatabase.saveToFile();
+    public void addProduct(String productID, String productName, String manufacturerName,String supplierName, int quantity , float price) {
+
+        //tries to insert a record and returns true if inserted and false if already exists
+        if (productsDatabase.insertRecord(new Product(productID, productName, manufacturerName, supplierName, quantity, price))) {
+
             System.out.println("Product added successfully!");
-        } else {
-            System.out.println(" Product already exists.");
         }
     }
 
 
     public Product[] getListOfProducts() {
-        productsDatabase.readFromFile();
-        ArrayList<Record> allRecords = productsDatabase.returnAllRecords();
-
-        ArrayList<Product> allProducts = new ArrayList<>();
-        for (Record r : allRecords) {
-            if (r instanceof Product) {
-                allProducts.add((Product) r);
-            }
-        }
-
-        Product[] productArray = new Product[allProducts.size()];
-        return allProducts.toArray(productArray);
+        return productsDatabase.returnAllRecords().toArray(new Product[0]);
     }
 
 
     //  Return all purchasing operations as an array
     public CustomerProduct[] getListOfPurchasingOperations() {
-        customerProductDatabase.readFromFile();
-        ArrayList<Record> allRecords = customerProductDatabase.returnAllRecords();
-
-        ArrayList<CustomerProduct> allPurchases = new ArrayList<>();
-        for (Record r : allRecords) {
-            if (r instanceof CustomerProduct) {
-                allPurchases.add((CustomerProduct) r);
-            }
-        }
-
-        CustomerProduct[] purchaseArray = new CustomerProduct[allPurchases.size()];
-        return allPurchases.toArray(purchaseArray);
+        return customerProductDatabase.returnAllRecords().toArray(new CustomerProduct[0]);
     }
+
     //  Purchase a product
     public boolean purchaseProduct(String customerSSN, String productID, LocalDate purchaseDate) {
-        productsDatabase.readFromFile();
-        customerProductDatabase.readFromFile();
-
         Product product = (Product) productsDatabase.getRecord(productID);
-
-        if (product == null) {
-            System.out.println(" Product not found.");
+        if(product == null) {
+            System.out.println("Product not found!");
             return false;
         }
         if (product.getQuantity() == 0) {
             System.out.println("️ Product out of stock.");
             return false;
         }
-
         // Decrease quantity by 1
         product.setQuantity(product.getQuantity() - 1);
 
         // Create purchase record and add it
-        CustomerProduct newPurchase = new CustomerProduct(customerSSN, productID, purchaseDate, false);
-        customerProductDatabase.insertRecord(newPurchase);
+        customerProductDatabase.insertRecord(new CustomerProduct(customerSSN, productID, purchaseDate));
 
-        // Save updates
-        productsDatabase.saveToFile();
-        customerProductDatabase.saveToFile();
+
 
         System.out.println("Purchase successful!");
         return true;
@@ -92,8 +59,6 @@ public class EmployeeRole {
     // return
     public double returnProduct(String customerSSN, String productID,LocalDate purchaseDate, LocalDate returnDate) {
 
-        productsDatabase.readFromFile();
-        customerProductDatabase.readFromFile();
 
         // Invalid dates
         if (returnDate.isBefore(purchaseDate)) {
@@ -103,7 +68,7 @@ public class EmployeeRole {
 
         Product product = (Product) productsDatabase.getRecord(productID);
         if (product == null) {
-            System.out.println(" Product not found in Products.txt.");
+            System.out.println(" Product not found!");
             return -1;
         }
 
@@ -111,7 +76,7 @@ public class EmployeeRole {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String key = customerSSN + "," + productID + "," + purchaseDate.format(formatter);
 
-        CustomerProduct purchase = customerProductDatabase.getRecord(key);
+        CustomerProduct purchase = (CustomerProduct) customerProductDatabase.getRecord(key);
         if (purchase == null) {
             System.out.println(" No matching purchase record found.");
             return -1;
@@ -125,36 +90,38 @@ public class EmployeeRole {
 
         // Valid return
         product.setQuantity(product.getQuantity() + 1);
+
         customerProductDatabase.deleteRecord(key);
 
-        productsDatabase.saveToFile();
-        customerProductDatabase.saveToFile();
+
+
 
         System.out.println(" Return successful. Refund = " + product.getPrice());
         return product.getPrice();
+
     }
 
     
     public boolean applyPayment(String customerSSN, LocalDate purchaseDate) {
-    ArrayList<Record> allRecords = customerProductDatabase.returnAllRecords();
+        ArrayList<Record> allRecords = customerProductDatabase.returnAllRecords();
 
-for (Record r : allRecords) {
-    if (r instanceof CustomerProduct) {
-        CustomerProduct record = (CustomerProduct) r;
-        if (record.getCustomerSSN().equals(customerSSN)
-                && record.getPurchaseDate().equals(purchaseDate)) {
+        for (Record r : allRecords) {
 
-            if (record.isPaid()) {
-                System.out.println("This purchase is already marked as paid.");
-                return false;
-            }
+                CustomerProduct record = (CustomerProduct) r;
+                if (record.getCustomerSSN().equals(customerSSN)
+                        && record.getPurchaseDate().equals(purchaseDate)) {
 
-            record.setPaid(true);
-            customerProductDatabase.saveToFile();
-            System.out.println("Payment applied successfully for " + customerSSN);
-            return true;
-        }
-    }
+                    if (record.isPaid()) {
+                        System.out.println("This purchase is already marked as paid.");
+                        return false;
+                    }
+
+                    record.setPaid(true);
+
+                    System.out.println("Payment applied successfully for " + customerSSN);
+                    return true;
+                }
+
 
 
         }

@@ -46,12 +46,14 @@ public abstract class DataBase {
         }
         return null;
     }
-    public void insertRecord(Record record){
+    public boolean insertRecord(Record record){
         if(!contains(record.getSearchKey())){
             records.add(record);
+            return true;
         }
         else {
             System.out.println("Record already exists");
+            return false;
         }
     }
     public void deleteRecord(String key){

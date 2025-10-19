@@ -10,6 +10,7 @@ public class CustomerProduct implements Record {
     public CustomerProduct(String customerSSN, String productID, LocalDate purchaseDate) {
         this.customerSSN = customerSSN;
         this.productID = productID;
+
         this.purchaseDate = purchaseDate;
         this.paid = false;
     }
@@ -41,6 +42,6 @@ public class CustomerProduct implements Record {
 
     @Override
     public String getSearchKey() {
-        return customerSSN+","+productID+","+purchaseDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        return customerSSN+","+productID+","+purchaseDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 }

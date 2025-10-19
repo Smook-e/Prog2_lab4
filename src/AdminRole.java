@@ -10,9 +10,9 @@ public class AdminRole {
         database.insertRecord( new EmployeeUser(employeeId,name,email,address,phoneNumber));
         logout();  
     }
-    public EmployeeUser[] getListOfEmployees()
+    public Record[] getListOfEmployees()
     {
-        return database.returnAllRecords().toArray(new EmployeeUser[0]);
+        return database.returnAllRecords().toArray(new Record[0]);
     }
     public void removeEmployee(String Key)
     {

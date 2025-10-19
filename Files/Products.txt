@@ -1,4 +1,6 @@
 P2394,Laptop,Apple,TechSupplier,10,1500.0
 M1382,Phone,Apple,TechSupplier,4,1000.0
-I9894,Ipad,Apple,TechSupplier,5,500.0
+I9894,Ipad,Apple,TechSupplier,0,500.0
 t9762,iPhone,Apple,TechSupplier,14,800.0
+t1233,Computer,Microsoft,PCStore,11,1000.0
+p1233,Computer,Apple,MacStore,9,1100.0
